@@ -418,7 +418,8 @@ m_Card = [
     , [393, 5, "Yao Jun", 0, 9, 15, 10, 1, 0]
     , [394, 5, "Deviling", 0, 60, 50, 61, -50, 62, -50, 63, -50, 64, -50, 65, -50, 66, -50, 67, -50, 68, -50, 69, -50, 0]
     , [395, 7, "Dancing Dragon", 0, 2, 1, 10, 3, 0]
-    , [396, 3, "Tamruan", 0, 18, 2, 5158, 10, 5159, 10, 5384, 10, 0]
+    // Inflict 30% more damage with Shield Charge and Shield Boomerang.
+    , [396, 3, "Tamruan", 0, 18, 2, 5158, 30, 5159, 30, 5384, 30, 0]
     , [397, 2, "Leaf Cat", "1% chance to obtain a [Crystal Blue] item when killing a [" + v_Race[5] + "] race monster.", 61, 10, 0]
     , [398, 1, "Mao Guai / Civil Servant", 0, 48, 20, 0]
     , [399, 6, "Iron Fist", 0, 120, 10, 50, -20, 0]
