@@ -681,7 +681,36 @@ function BattleCalc999() {
             BattleCalc998()
         } else if (159 == n_A_ActiveSkill || 384 == n_A_ActiveSkill) {
             var stoneDiscusMod = EquipNumSearch(1371) ? 1 + .03 * n_A_LEFT_REFINE : 1
-              , shieldRefineBonus = 10 * n_A_LEFT_REFINE;
+              , shieldRefineBonus = 10 * n_A_LEFT_REFINE
+              // TODO: Temporary, Shield Boomerang-only mastery handling. Generalize mastery application across skills later.
+              // Hercules-style: mastery added flat after skill mods (only relevant masteries for SB)
+              , masteryBonus = function() {
+                    var bonus = 0;
+                    // One-handed sword mastery (Sword Mastery)
+                    if (n_A_WeaponType === 1) {
+                        bonus += 4 * SkillSearch(3);
+                    // Dagger mastery uses the same Sword Mastery skill
+                    } else if (n_A_WeaponType === 2) {
+                        bonus += 4 * SkillSearch(3);
+                    // One-handed spear mastery (Spear Mastery); server rules: +5 per level base, +7 with Cavalier Mastery
+                    } else if (n_A_WeaponType === 4) {
+                        var spearMastery = SkillSearch(69);
+                        bonus += (SkillSearch(78) > 0 ? 7 : 5) * spearMastery;
+                    }
+
+                    // Demon Bane (custom): +5 per level + 0.5 * (1 + BaseLV) vs Undead/Demon; otherwise +4 per level
+                    var demonBaneLv = SkillSearch(24);
+                    if (demonBaneLv > 0) {
+                        var isUndeadDemon = selectedMonster[2] === 1 || selectedMonster[2] === 6 || (selectedMonster[3] >= 90 && selectedMonster[3] <= 99);
+                        if (isUndeadDemon) {
+                            bonus += demonBaneLv * 5 + Math.floor(0.5 * (1 + n_A_BaseLV));
+                        } else {
+                            bonus += 4 * demonBaneLv;
+                        }
+                    }
+
+                    return bonus;
+                }();
             if (n_PerHIT_DMG = 0,
             n_rangedAtk = 1,
             n_A_Weapon_element = 0,
@@ -729,10 +758,10 @@ function BattleCalc999() {
                     Last_DMG_A[_] = Last_DMG_B[_] = w_DMG[_],
                     InnStr[_] += Last_DMG_A[_]
             }
-            // Add shield refine bonus after all modifiers so it still applies even if elemental mods reduce base damage to 0 (e.g., vs Ghost)
+            // Add shield refine bonus and mastery after all modifiers so they stay flat (Hercules pre-renewal behavior)
             w_DMG[1] = w_DMG[1] * w_HIT / 100;
             for (var _ = 0; 2 >= _; _++)
-                w_DMG[_] += shieldRefineBonus,
+                w_DMG[_] += shieldRefineBonus + masteryBonus,
                 Last_DMG_A[_] = Last_DMG_B[_] = w_DMG[_],
                 InnStr[_] = Last_DMG_A[_];
             CastAndDelay();
