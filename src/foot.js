@@ -4106,7 +4106,8 @@ function URLIN() {
             a && (t = location.href.split("?")),
             _ && (t = location.href.split("#"));
         var a = t[1];
-        20 == StoN2(a.substr(1, 2)) && StoN2(a.substr(90, 1)) ? SuperNoviceFullWeaponCHECK = 1 : SuperNoviceFullWeaponCHECK = 0;
+        // Super Novice Spirit lives in skill slot 9 (skills start at offset 89)
+        20 == StoN2(a.substr(1, 2)) && StoN2(a.substr(89 + 9, 1)) ? SuperNoviceFullWeaponCHECK = 1 : SuperNoviceFullWeaponCHECK = 0;
         var A = StoN2(a.substr(0, 1));
         c.A_JOB.value = StoN2(a.substr(1, 2)),
             ClickJob(StoN2(a.substr(1, 2)), 2),
